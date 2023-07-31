@@ -131,6 +131,39 @@ public class ArrayListImplementation<E> {
     }
 
     public void sort(Comparator<? super E> c) {
-        Arrays.sort((E[]) elementData, 0, size, c);
+        mergeSort((E[]) elementData, size, c);
+    }
+
+    public void mergeSort(E[] a, int n, Comparator<? super E> c) {
+        if (n < 2) {
+            return;
+        }
+        int mid = n / 2;
+        E[] l = Arrays.copyOfRange(a, 0, mid);
+        E[] r = Arrays.copyOfRange(a, mid, n);
+        mergeSort(l, mid, c);
+        mergeSort(r, n - mid, c);
+
+        merge(a, l, r, mid, n - mid, c);
+    }
+
+    public void merge(
+        E[] a, E[] l, E[] r, int left, int right, Comparator<? super E> c) {
+
+        int i = 0, j = 0, k = 0;
+        while (i < left && j < right) {
+            if (c.compare(l[i], r[j]) <= 0) {
+                a[k++] = l[i++];
+            }
+            else {
+                a[k++] = r[j++];
+            }
+        }
+        while (i < left) {
+            a[k++] = l[i++];
+        }
+        while (j < right) {
+            a[k++] = r[j++];
+        }
     }
 }
